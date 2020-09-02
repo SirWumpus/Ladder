@@ -100,6 +100,16 @@ public class Ladder extends JFrame {
 		8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72,
 	};
 
+	private JLabel makeLabel(String text, Color fg, Color bg, int fontSize) {
+		JLabel label = new JLabel();
+		label.setText(text);
+		label.setOpaque(true);
+		label.setBackground(fg);
+		label.setForeground(bg);
+		label.setFont(new Font("Monospaced", Font.BOLD, fontSize));
+		return label;
+	}
+
 	/**
 	 * Create a new Ladder game.
 	 */
@@ -337,31 +347,38 @@ public class Ladder extends JFrame {
 			s1 = props.getProperty("Level" + i, "");
 		}
 
+		int bgColor, fgColor;
+		try {
+			bgColor = Integer.parseInt(props.getProperty("Background Color", "" + Color.black.getRGB()), 10);
+		} catch (NumberFormatException e){
+			bgColor = Color.black.getRGB();
+		}
+
+		try {
+			fgColor = Integer.parseInt(props.getProperty("Foreground Color", "" + Color.green.getRGB()), 10);
+		} catch (NumberFormatException e){
+			fgColor = Color.green.getRGB();
+		}
+		int fs;
+		try {
+			fs = Integer.parseInt(props.getProperty("Font Size", "14"), 10);
+		} catch (NumberFormatException e){
+			fs = 14;
+		}
+
 		// put the labels at the bottom of the screen
-		ladField = new JLabel();
-		ladField.setText("Lads     3");
-		ladField.setBackground(Color.lightGray);
-		ladField.setForeground(Color.black);
-
-		levelField = new JLabel();
-		levelField.setText("Level     1");
-		levelField.setBackground(Color.lightGray);
-		levelField.setForeground(Color.black);
-
-		scoreField = new JLabel();
-		scoreField.setText("Score     0");
-		scoreField.setBackground(Color.lightGray);
-		scoreField.setForeground(Color.black);
-
-		bonusTimeField = new JLabel();
-		bonusTimeField.setText("Bonus time     2000");
-		bonusTimeField.setBackground(Color.lightGray);
-		bonusTimeField.setForeground(Color.black);
+		ladField = makeLabel("Lads     3", new Color(fgColor), new Color(bgColor), fs);
+		levelField = makeLabel("Level     1", new Color(fgColor), new Color(bgColor), fs);
+		scoreField = makeLabel("Score     0", new Color(fgColor), new Color(bgColor), fs);
+		bonusTimeField = makeLabel("Bonus time     2000", new Color(fgColor), new Color(bgColor), fs);
 
 		level = nextLevel(0); // Load the first level
 
 		// initialize the game
 		ladderCanvas = new LadderCanvas(level, this);
+		ladderCanvas.setBGColor(new Color(bgColor));
+		ladderCanvas.setFGColor(new Color(fgColor));
+		ladderCanvas.setFontSize(fs);
 
 		// lay out this frame using a grid bag layout
 		GridBagLayout gridbag = new GridBagLayout();
@@ -401,32 +418,11 @@ public class Ladder extends JFrame {
 		c.gridy = 1;
 		c.gridheight = 1;
 		c.gridwidth = 1;
+		c.fill= GridBagConstraints.HORIZONTAL;
 		gridbag.setConstraints(bonusTimeField, c);
 		this.getContentPane().add(bonusTimeField);
 
 		this.getContentPane().setLayout(gridbag);
-
-		int color;
-		try {
-			color = Integer.parseInt(props.getProperty("Background Color", "" + Color.black.getRGB()), 10);
-		} catch (NumberFormatException e){
-			color = Color.black.getRGB();
-		}
-		ladderCanvas.setBGColor(new Color(color));
-		try {
-			color = Integer.parseInt(props.getProperty("Foreground Color", "" + Color.green.getRGB()), 10);
-		} catch (NumberFormatException e){
-			color = Color.green.getRGB();
-		}
-		ladderCanvas.setFGColor(new Color(color));
-
-		int fs;
-		try {
-			fs = Integer.parseInt(props.getProperty("Font Size", "12"), 10);
-		} catch (NumberFormatException e){
-			fs = 12;
-		}
-		ladderCanvas.setFontSize(fs);
 
 		// decide on the position of the frame on the screen
 		int x, y;
