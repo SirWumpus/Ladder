@@ -417,16 +417,20 @@ public class LadderCanvas extends JPanel implements Runnable {
 	 */
 	public void paintComponent(Graphics g){
 		g.setColor(bgColor);
-		g.fillRect(g.getClipBounds().x, g.getClipBounds().y, g.getClipBounds().width, g.getClipBounds().height);
-		g.setFont(font);
+		Rectangle bounds = g.getClipBounds();
+		g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
 		g.setColor(fgColor);
-		int rowStart = (int)Math.floor((double)g.getClipBounds().y/letterHeight);
-		int rowEnd = (int)Math.ceil((double)(g.getClipBounds().y + g.getClipBounds().height + letterHeight - letterAcsent)/letterHeight + 1);
-		int columnStart = (int)Math.floor((double)g.getClipBounds().x/letterWidth);
-		int columnEnd = (int)Math.ceil((double)(g.getClipBounds().x + g.getClipBounds().width + letterWidth)/letterWidth);
-		for (int i=rowStart+1; i<rowEnd && i<realLevel.getRowCount() + 1; i++){
-			 g.drawChars(screenLevel.getCharsAt(i-1, columnStart, columnEnd-columnStart-1), 0, columnEnd-columnStart-1,
-				(columnStart)*letterWidth,(i-1)*letterHeight+letterAcsent);
+		g.setFont(font);
+
+		int rowStart = bounds.y / letterHeight;
+		int rowEnd = (bounds.y + bounds.height + letterHeight) / letterHeight;
+		int columnStart = bounds.x / letterWidth;
+		int columnEnd = (bounds.x + bounds.width + letterWidth) / letterWidth;
+
+		for (int i = rowStart; i < rowEnd && i < realLevel.getRowCount(); i++){
+			g.drawChars(screenLevel.getCharsAt(i, columnStart, columnEnd - columnStart - 1),
+				0, columnEnd-columnStart-1,
+				(columnStart)*letterWidth, i * letterHeight + letterAcsent);
 		}
 		if (gameStop){
 			g.setColor(Color.red);
