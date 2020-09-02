@@ -284,7 +284,7 @@ public class LadderCanvas extends JPanel implements Runnable {
 	 * @param size the size of the font in points
 	 */
 	public void setFontSize(int size){
-		font = new Font("Monospaced", Font.PLAIN, size);
+		setFont(font = new Font("Monospaced", Font.PLAIN, size));
 		FontMetrics fontMetrics = this.getFontMetrics(font);
 		letterWidth = fontMetrics.charWidth('m');
 		letterHeight = fontMetrics.getHeight();
@@ -420,7 +420,6 @@ public class LadderCanvas extends JPanel implements Runnable {
 		Rectangle bounds = g.getClipBounds();
 		g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
 		g.setColor(fgColor);
-		g.setFont(font);
 
 		int rowStart = bounds.y / letterHeight;
 		int rowEnd = (bounds.y + bounds.height + letterHeight) / letterHeight;
