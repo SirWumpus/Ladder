@@ -321,10 +321,8 @@ public class Level implements Cloneable {
 				level[i][j] = s.charAt(j);
 			}
 			// pad the line if needed.
-			for (int j = s.length(); j < maxLength; j++){
-				level[i][j] = ' ';
-				changed = true; // since we are padding a line
-			}
+			Arrays.fill(level[i], s.length(), maxLength, ' ');
+			changed = s.length() < maxLength;	// Did we pad line?
 		}
 		if (st.hasMoreTokens()){
 			changed = true; // we chopped blank lines off the end.
