@@ -34,10 +34,6 @@ public class LadderCanvas extends JPanel implements Runnable {
 	 * The instance of Ladder which we should report back to.
 	 */
 	private Ladder caller; // the caller of this
-	/**
-	 * Minimum size
-	 */
-	private Dimension minSize;
 
 	private Level screenLevel = new Level();
 
@@ -289,7 +285,6 @@ public class LadderCanvas extends JPanel implements Runnable {
 		letterWidth = fontMetrics.charWidth('m');
 		letterHeight = fontMetrics.getHeight();
 		letterAcsent = fontMetrics.getAscent();
-		minSize = new Dimension(letterWidth*(realLevel.getColumnCount()), letterHeight*(realLevel.getRowCount()));
 		fontSize = size;
 	}
 
@@ -389,7 +384,6 @@ public class LadderCanvas extends JPanel implements Runnable {
 			ladStartPosY = p.height+1;
 			ladStartPosX = p.width+1;
 		}
-		minSize = new Dimension(letterWidth*(realLevel.getColumnCount()), letterHeight*(realLevel.getRowCount()));
 	}
 
 	/**
@@ -407,7 +401,7 @@ public class LadderCanvas extends JPanel implements Runnable {
 	 * @return the minimum size in pixels
 	 */
 	public synchronized Dimension getMinimumSize() {
-		return minSize;
+		return new Dimension(letterWidth*(realLevel.getColumnCount()), letterHeight*(realLevel.getRowCount()));
 	}
 
 	/**
