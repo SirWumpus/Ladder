@@ -74,11 +74,11 @@ public class LadderCanvas extends JPanel implements Runnable {
 	/**
 	 * A list of squares that need to be repainted.
 	 */
-	private Vector repaintList;
+	private Vector<Dimension> repaintList;
 	/**
 	 * A list of all the objects that spit out barrels on this level.
 	 */
-	private Vector barrelProducers;
+	private Vector<BarrelProducer> barrelProducers;
 	/**
 	 * Should the entire screen be repainted on the next refresh?
 	 */
@@ -227,8 +227,8 @@ public class LadderCanvas extends JPanel implements Runnable {
 		this.caller = caller;
 		bgColor = Color.black;
 		fgColor = Color.green;
-		repaintList = new Vector();
-		barrelProducers = new Vector();
+		repaintList = new Vector<Dimension>();
+		barrelProducers = new Vector<BarrelProducer>();
 		addKeyListener(new KeyAdapter(){
 			 public void keyPressed(KeyEvent ke){
 				int keycode = ke.getKeyCode();

@@ -97,9 +97,7 @@ public class Ladder extends JFrame {
 	 * Array of choices for font sizes.
 	 */
 	private final static Integer[] FONT_SIZES = {
-		new Integer(8), new Integer(9), new Integer(10), new Integer(11), new Integer(12), new Integer(14),
-		new Integer(16), new Integer(18), new Integer(20), new Integer(22), new Integer(24), new Integer(26),
-		new Integer(28), new Integer(36), new Integer(48), new Integer(72),
+		8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72,
 	};
 
 	/**
@@ -195,7 +193,7 @@ public class Ladder extends JFrame {
 					Integer i;
 					i = (Integer)JOptionPane.showInputDialog(Ladder.this,
 						"Please pick a font size", "Font Size", JOptionPane.QUESTION_MESSAGE,
-						null, FONT_SIZES, new Integer(ladderCanvas.getFontSize()));
+						null, FONT_SIZES, Integer.valueOf(ladderCanvas.getFontSize()));
 					if (i!=null){
 						ladderCanvas.setFontSize(i.intValue());
 						props.put("Font Size", ("" + i.intValue()));

@@ -195,13 +195,13 @@ public class HighScoreList {
 					return highScores[row].name;
 				}
 				case 1:{
-					return new Long(highScores[row].score);
+					return Long.valueOf(highScores[row].score);
 				}
 				case 2:{
-					return new Integer(highScores[row].level);
+					return Integer.valueOf(highScores[row].level);
 				}
 				default:{
-					return new Integer(row*col);
+					return Integer.valueOf(row*col);
 				}
 			}
 		}

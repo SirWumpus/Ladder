@@ -32,7 +32,7 @@ public class BarrelProducer{
 	 * If a certain barrel producer needs a barrel and there is one in the
 	 * vector, it can take one.  If it has an extra it can leave one.
 	 */
-	private static Vector allBarrels = new Vector();
+	private static Vector<Barrel> allBarrels = new Vector<Barrel>();
 
 	/**
 	 * The random number producer for this class
@@ -45,7 +45,7 @@ public class BarrelProducer{
 	 * instances of barrels, which would slow the application down due to
 	 * excessive garbage collection.
 	 */
-	private Vector barrels = new Vector();
+	private Vector<Barrel> barrels = new Vector<Barrel>();
 
 	/**
 	 * The x coordinate of this barrel producer
@@ -86,12 +86,6 @@ public class BarrelProducer{
 	}
 
 	/**
-	 * @deprecated this method has no effect.
-	 */
-	public void setMinBarrels(int num){
-	}
-
-	/**
 	 * Send a barrel back to be recycled.  Done so that new instances of barrels do
 	 * not continually need to be created slowing down garbage collection.
 	 *
@@ -100,16 +94,6 @@ public class BarrelProducer{
 	public void recycleBarrel(Barrel barrel){
 		barrels.removeElement(barrel);
 		allBarrels.addElement(barrel);
-	}
-
-	/**
-	 * Get a list of Barrels that are currently visible on the screen.
-	 *
-	 * @return null
-	 * @deprecated replaced by getBarrelCount and getBarrelAt.
-	 */
-	public Vector getBarrels(){
-		return (null);
 	}
 
 	/**
@@ -170,10 +154,10 @@ public class BarrelProducer{
 		barrels.addElement(b);
 	}
 
-	protected void finalize() throws Exception {
-		while (barrels.size() > 0){
-			allBarrels.addElement(barrels.elementAt(barrels.size()-1));
-			barrels.removeElementAt(barrels.size()-1);
-		}
-	}
+//	protected void finalize() throws Exception {
+//		while (barrels.size() > 0){
+//			allBarrels.addElement(barrels.elementAt(barrels.size()-1));
+//			barrels.removeElementAt(barrels.size()-1);
+//		}
+//	}
 }
