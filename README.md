@@ -14,6 +14,14 @@ Using only ASCII characters, ladder was an addictive game that was very popular 
 Ladder was rewritten in Java by Stephen Ostermiller and can be played on most of today's computers.  This version includes all the original levels and several new ones.  It also comes with a level editor so that you can make your own.
 
 
+Start
+-----
+
+To start the game, double-clicking on the `ladder.jar` file; otherwise from the command line:
+
+        javaw -jar ladder.jar
+
+
 Game Play Instructions
 ----------------------
 
