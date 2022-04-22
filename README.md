@@ -1,7 +1,12 @@
+![Ladder Screen](./ladder_screen_1.png)
+
+
 Ostermiller's Java Ladder
 =========================
 
 This is an updated version of Ostermiller's Ladder built against OpenJDK 14.  His last release, Ladder 1.3, was built against Java 1.5 and failed to run or compile with newer Java runtime releases.
+
+2020-09-11: Ostermiller confirms these updates build against Java 8 and has built a new `ladder.jar 1.3.1` with additional levels.
 
 
 Overview
