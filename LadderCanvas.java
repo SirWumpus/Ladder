@@ -1,6 +1,6 @@
 /*
  * Part of Ladder, a game.
- * Copyright (C) 1999, 2020
+ * Copyright (C) 1999, 2023
  * Stephen Ostermiller http://ostermiller.org/contact.pl?regarding=Ladder
  * Anthony Howe https://github.com/SirWumpus/Ladder
  *
@@ -227,26 +227,47 @@ public class LadderCanvas extends JPanel implements Runnable {
 		repaintList = new Vector<Dimension>();
 		barrelProducers = new Vector<BarrelProducer>();
 		addKeyListener(new KeyAdapter(){
-			 public void keyPressed(KeyEvent ke){
-				int keycode = ke.getKeyCode();
-				if (keycode == KeyEvent.VK_ESCAPE){
-					LadderCanvas.this.caller.togglePause();
-				} else if (keycode == KeyEvent.VK_UP || keycode == KeyEvent.VK_NUMPAD8){
+			/**
+			 * Some key has been pressed, react to it.
+			 *
+			 * @param ke The key event corresponding to the key
+			 */
+			public void keyPressed(KeyEvent ke){
+				switch (ke.getKeyCode()) {
+				case KeyEvent.VK_UP:
+				case KeyEvent.VK_W:
+				case KeyEvent.VK_NUMPAD8:
 					nextCommand = Lad.UP;
-				} else if (keycode == KeyEvent.VK_DOWN || keycode == KeyEvent.VK_NUMPAD2){
+					break;
+				case KeyEvent.VK_DOWN:
+				case KeyEvent.VK_S:
+				case KeyEvent.VK_NUMPAD2:
 					nextCommand = Lad.DOWN;
-				} else if (keycode == KeyEvent.VK_LEFT || keycode == KeyEvent.VK_NUMPAD4){
+					break;
+				case KeyEvent.VK_LEFT:
+				case KeyEvent.VK_A:
+				case KeyEvent.VK_NUMPAD4:
 					nextCommand = Lad.LEFT;
-				} else if (keycode == KeyEvent.VK_RIGHT || keycode == KeyEvent.VK_NUMPAD6){
+					break;
+				case KeyEvent.VK_RIGHT:
+				case KeyEvent.VK_D:
+				case KeyEvent.VK_NUMPAD6:
 					nextCommand = Lad.RIGHT;
-				} else if (keycode == KeyEvent.VK_SPACE){
+					break;
+				case KeyEvent.VK_SPACE:
 					jumpCommand = true;
-				} else if (keycode == KeyEvent.VK_ESCAPE){
-					//escape is used to pause the game, lets ignore it here
-					//it should be caught by main ladder class.
-				} else if (STEP_MODE && keycode == KeyEvent.VK_ENTER){
-					go_on = true;
-				} else {
+					break;
+				case KeyEvent.VK_ESCAPE:
+					// Escape is used to pause the game, lets ignore it here,
+					// it should be caught by main ladder class.
+					break;
+				case KeyEvent.VK_ENTER:
+					if (STEP_MODE) {
+						go_on = true;
+						break;
+					}
+					/* fallthrough */
+				default:
 					nextCommand = Lad.STOP;
 				}
 			}
@@ -813,32 +834,5 @@ public class LadderCanvas extends JPanel implements Runnable {
 		}
 		caller.setScore(score);
 		//System.out.println(score);
-	}
-
-	/**
-	 * Some key has been pressed, react to it.
-	 *
-	 * @param ke The key event corresponding to the key
-	 */
-	public void keyPressed(KeyEvent ke){
-		int keycode = ke.getKeyCode();
-		if (keycode == KeyEvent.VK_UP || keycode == KeyEvent.VK_NUMPAD8){
-			nextCommand = Lad.UP;
-		} else if (keycode == KeyEvent.VK_DOWN || keycode == KeyEvent.VK_NUMPAD2){
-			nextCommand = Lad.DOWN;
-		} else if (keycode == KeyEvent.VK_LEFT || keycode == KeyEvent.VK_NUMPAD4){
-			nextCommand = Lad.LEFT;
-		} else if (keycode == KeyEvent.VK_RIGHT || keycode == KeyEvent.VK_NUMPAD6){
-			nextCommand = Lad.RIGHT;
-		} else if (keycode == KeyEvent.VK_SPACE){
-			jumpCommand = true;
-		} else if (keycode == KeyEvent.VK_ESCAPE){
-			//escape is used to pause the game, lets ignore it here
-			//it should be caught by main ladder class.
-		} else if (STEP_MODE && keycode == KeyEvent.VK_ENTER){
-			go_on = true;
-		} else {
-			nextCommand = Lad.STOP;
-		}
 	}
 }

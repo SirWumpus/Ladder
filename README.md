@@ -30,7 +30,7 @@ To start the game, double-clicking on the `ladder.jar` file; otherwise from the 
 Game Play Instructions
 ----------------------
 
-You control the lad by using the arrow keys, jumping with the space-bar, and stop by pressing any other key.  But beware of the falling rocks called Der Rocks.  You can find and grasp the treasures (shown as $) and gold statues (shown as &) before the bonus time runs out.  You will receive the bonus time points that are left when you have finished the level.  A new lad will be awarded for every 10,000 points.  
+You control the lad by using the arrow or WASD keys, jumping with the space-bar, and stop by pressing any other key.  But beware of the falling rocks called Der Rocks.  You can find and grasp the treasures (shown as $) and gold statues (shown as &) before the bonus time runs out.  You will receive the bonus time points that are left when you have finished the level.  A new lad will be awarded for every 10,000 points.
 
 Remember, there is more than one way to skin a cat. (chum)
 
