@@ -33,7 +33,7 @@ compile : ${CLASSES}
 
 pack : compile
 	mkdir -p com/Ostermiller/Ladder
-	cp Makefile Ladder.mf *$C *$J *.lvl *.ini README.md com/Ostermiller/Ladder
+	cp Makefile Ladder.mf *$C *$J *.lvl *.ini README.md ladder_screen_1.png com/Ostermiller/Ladder
 	jar -v -c -m Ladder.mf -f ladder$A com/
 
 testjar : pack clean
