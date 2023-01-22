@@ -24,7 +24,7 @@ run : compile
 	${JAVA} com.Ostermiller.Ladder.Ladder
 
 clean :
-	-rm *$C
+	-rm -rf *$C ./com
 
 distclean : clean
 	rm -rf core *.bak ladder$A
@@ -35,7 +35,6 @@ pack : compile
 	mkdir -p com/Ostermiller/Ladder
 	cp Makefile Ladder.mf *$C *$J *.lvl *.ini README.md com/Ostermiller/Ladder
 	jar -v -c -m Ladder.mf -f ladder$A com/
-	rm -rf com
 
 testjar : pack clean
 	javaw -jar ladder$A
