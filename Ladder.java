@@ -142,13 +142,13 @@ public class Ladder extends JFrame {
 					temp = JColorChooser.showDialog(Ladder.this, "Background Color", ladderCanvas.getBGColor());
 					if (temp != null){
 						ladderCanvas.setBGColor(temp);
-						props.put("Background Color", ("" + temp.getRGB()));
+						props.put("BackgroundColor", ("" + temp.getRGB()));
 					}
 				} else if (object == fgItem){
 					temp = JColorChooser.showDialog(Ladder.this, "Background Color", ladderCanvas.getFGColor());
 					if (temp != null){
 						ladderCanvas.setFGColor(temp);
-						props.put("Foreground Color", ("" + temp.getRGB()));
+						props.put("ForegroundColor", ("" + temp.getRGB()));
 					}
 				} else if (object == newItem){
 					startGame();
@@ -207,7 +207,7 @@ public class Ladder extends JFrame {
 						null, FONT_SIZES, Integer.valueOf(ladderCanvas.getFontSize()));
 					if (i!=null){
 						ladderCanvas.setFontSize(i.intValue());
-						props.put("Font Size", ("" + i.intValue()));
+						props.put("FontSize", ("" + i.intValue()));
 						pack();
 					}
 				} else if (object instanceof LevelMenuItem){
@@ -350,19 +350,19 @@ public class Ladder extends JFrame {
 
 		int bgColor, fgColor;
 		try {
-			bgColor = Integer.parseInt(props.getProperty("Background Color", "" + Color.black.getRGB()), 10);
+			bgColor = Integer.parseInt(props.getProperty("BackgroundColor", "" + Color.black.getRGB()), 10);
 		} catch (NumberFormatException e){
 			bgColor = Color.black.getRGB();
 		}
 
 		try {
-			fgColor = Integer.parseInt(props.getProperty("Foreground Color", "" + Color.green.getRGB()), 10);
+			fgColor = Integer.parseInt(props.getProperty("ForegroundColor", "" + Color.green.getRGB()), 10);
 		} catch (NumberFormatException e){
 			fgColor = Color.green.getRGB();
 		}
 		int fs;
 		try {
-			fs = Integer.parseInt(props.getProperty("Font Size", "14"), 10);
+			fs = Integer.parseInt(props.getProperty("FontSize", "14"), 10);
 		} catch (NumberFormatException e){
 			fs = 14;
 		}
