@@ -1,6 +1,6 @@
 /*
  * Part of Ladder, a game.
- * Copyright (C) 1999, 2020
+ * Copyright (C) 1999, 2023
  * Stephen Ostermiller http://ostermiller.org/contact.pl?regarding=Ladder
  * Anthony Howe https://github.com/SirWumpus/Ladder
  *
@@ -43,21 +43,9 @@ public class Ladder extends JFrame {
 	private static BarrelProducer barrelProducer = new BarrelProducer(0,0);
 
 	/**
-	 * menu items in the menus
-	 */
-	private JMenuItem openItem, editItem, saveItem, newItem, bgItem,
-		fgItem, exitItem, fontItem, scoresItem;
-
-	/**
 	 * menu itime in the edit menu
 	 */
 	private JCheckBoxMenuItem pauseItem;
-
-	/**
-	 * menu items in the difficulty menu
-	 */
-	private JRadioButtonMenuItem easyItem, mediumItem,
-		hardItem, veryHardItem, impossibleItem;
 
 	/**
 	 * for displaying the score and lives left and stuff
@@ -98,7 +86,7 @@ public class Ladder extends JFrame {
 	 * Array of choices for font sizes.
 	 */
 	private final static Integer[] FONT_SIZES = {
-		8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72,
+		11, 12, 14, 16, 18, 20, 22, 24, 26, 28,
 	};
 
 	private JLabel makeLabel(String text, Color fg, Color bg, int fontSize) {
@@ -114,8 +102,8 @@ public class Ladder extends JFrame {
 	/**
 	 * Create a new Ladder game.
 	 */
-	public Ladder(){
-
+	public Ladder()
+	{
 		loadProperties();
 		running = false;
 		//Build the menu bar.
@@ -127,125 +115,89 @@ public class Ladder extends JFrame {
 		//Specifying the second argument as true
 		//makes this a tear-off menu.
 
-		ActionListener actList = new ActionListener(){
-			/**
-			 * action performed
-			 *
-			 * @param event action performed
-			 */
-			public void actionPerformed(java.awt.event.ActionEvent event){
-				Color temp;
-				Object object = event.getSource();
-				if (object == exitItem){
-					exit();
-				} else if (object == bgItem){
-					temp = JColorChooser.showDialog(Ladder.this, "Background Color", ladderCanvas.getBGColor());
-					if (temp != null){
-						ladderCanvas.setBGColor(temp);
-						props.put("BackgroundColor", ("" + temp.getRGB()));
-					}
-				} else if (object == fgItem){
-					temp = JColorChooser.showDialog(Ladder.this, "Background Color", ladderCanvas.getFGColor());
-					if (temp != null){
-						ladderCanvas.setFGColor(temp);
-						props.put("ForegroundColor", ("" + temp.getRGB()));
-					}
-				} else if (object == newItem){
-					startGame();
-				} else if (object == openItem){
-					FileDialog fd = new FileDialog(Ladder.this, "Open a Level", FileDialog.LOAD);
-					fd.setFile("*.lvl");
-					fd.setVisible(true);
-					String s = fd.getFile();
-					if (s != null){
-						try {
-							Level level = new Level();
-							level.load(s);
-							changeLevel(level);
-							Component[] levels = levelMenu.getMenuComponents();
-							if (level.isChanged()){
-								level.store(s);
-								System.out.println(s + " cleaned up and resaved.");
-							}
-							for (int i=0; i<levels.length; i++){
-								LevelMenuItem menuItem = (LevelMenuItem)levels[i];
-								menuItem.setSelected(false);
-							}
-						} catch (IOException e){
-							System.err.println(e.getMessage());
-						}
-					}
-				} else if (object == easyItem){
-					 ladderCanvas.setDifficulty(LadderCanvas.EASY);
-				} else if (object == mediumItem){
-					 ladderCanvas.setDifficulty(LadderCanvas.MEDIUM);
-				} else if (object == hardItem){
-					 ladderCanvas.setDifficulty(LadderCanvas.HARD);
-				} else if (object == veryHardItem){
-					 ladderCanvas.setDifficulty(LadderCanvas.VERY_HARD);
-				} else if (object == impossibleItem){
-					 ladderCanvas.setDifficulty(LadderCanvas.IMPOSSIBLE);
-				} else if (object == saveItem){
-					FileDialog fd = new FileDialog(Ladder.this, "Save a Level", FileDialog.SAVE);
-					fd.setFile("*.lvl");
-					fd.setVisible(true);
-					if (fd.getFile() != null){
-						try {
-							level.store(fd.getFile());
-						} catch (IOException e){
-							System.err.println(e.getMessage());
-						}
-					}
-				} else if (object == editItem){
-					 new Editor(level.getLevel(), Ladder.this);
-				} else if (object == scoresItem){
-					highScores.showHighScoreWindow(Ladder.this);
-				} else if (object == fontItem){
-					Integer i;
-					i = (Integer)JOptionPane.showInputDialog(Ladder.this,
-						"Please pick a font size", "Font Size", JOptionPane.QUESTION_MESSAGE,
-						null, FONT_SIZES, Integer.valueOf(ladderCanvas.getFontSize()));
-					if (i!=null){
-						ladderCanvas.setFontSize(i.intValue());
-						props.put("FontSize", ("" + i.intValue()));
-						pack();
-					}
-				} else if (object instanceof LevelMenuItem){
+		JMenu fileMenu = new JMenu("File", false);
+		fileMenu.setMnemonic(KeyEvent.VK_F);
+		ladderMenuBar.add(fileMenu);
+
+		JMenuItem openItem = new JMenuItem("Open Level...", KeyEvent.VK_O);
+		openItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				FileDialog fd = new FileDialog(Ladder.this, "Open a Level", FileDialog.LOAD);
+				fd.setFile("*.lvl");
+				fd.setVisible(true);
+				String s = fd.getFile();
+				if (s != null){
 					try {
-						changeLevel(((LevelMenuItem)object).getLevel());
+						Level level = new Level();
+						level.load(s);
+						changeLevel(level);
+						Component[] levels = levelMenu.getMenuComponents();
+						if (level.isChanged()){
+							level.store(s);
+							System.out.println(s + " cleaned up and resaved.");
+						}
+						for (int i=0; i<levels.length; i++){
+							LevelMenuItem menuItem = (LevelMenuItem)levels[i];
+							menuItem.setSelected(false);
+						}
 					} catch (IOException e){
 						System.err.println(e.getMessage());
 					}
 				}
 			}
-		};
-		JMenu fileMenu = new JMenu("File", true);
-		fileMenu.setMnemonic('f');
-		ladderMenuBar.add(fileMenu);
-		openItem = new JMenuItem("Open Level...", 'o');
-		openItem.addActionListener(actList);
+		});
 		fileMenu.add(openItem);
-		saveItem = new JMenuItem("Save Level...", 's');
-		saveItem.addActionListener(actList);
+
+		JMenuItem saveItem = new JMenuItem("Save Level...", KeyEvent.VK_S);
+		saveItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				FileDialog fd = new FileDialog(Ladder.this, "Save a Level", FileDialog.SAVE);
+				fd.setFile("*.lvl");
+				fd.setVisible(true);
+				if (fd.getFile() != null){
+					try {
+						level.store(fd.getFile());
+					} catch (IOException e){
+						System.err.println(e.getMessage());
+					}
+				}
+			}
+		});
 		fileMenu.add(saveItem);
-		newItem = new JMenuItem("New Game", 'n');
+
+		JMenuItem newItem = new JMenuItem("New Game", KeyEvent.VK_N);
 		newItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
-		newItem.addActionListener(actList);
+		newItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				startGame();
+			}
+		});
 		fileMenu.add(newItem);
-		scoresItem = new JMenuItem("High Scores...", 'h');
-		scoresItem.addActionListener(actList);
+
+		JMenuItem scoresItem = new JMenuItem("High Scores...", KeyEvent.VK_H);
+		scoresItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+					highScores.showHighScoreWindow(Ladder.this);
+			}
+		});
 		fileMenu.add(scoresItem);
-		exitItem = new JMenuItem("Exit", 'x');
-		exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, ActionEvent.ALT_MASK));
-		exitItem.addActionListener(actList);
+
+		JMenuItem exitItem = new JMenuItem("Exit", KeyEvent.VK_X);
+//		exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, ActionEvent.ALT_MASK));
+		exitItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				exit();
+			}
+		});
 		fileMenu.add(exitItem);
 
 		//Build second menu in the menu bar.
 		JMenu editMenu = new JMenu("Edit");
-		editMenu.setMnemonic('e');
+		editMenu.setMnemonic(KeyEvent.VK_E);
 		ladderMenuBar.add(editMenu);
+
 		pauseItem = new JCheckBoxMenuItem("Pause", false);
-		pauseItem.setMnemonic('p');
+		pauseItem.setMnemonic(KeyEvent.VK_P);
 		pauseItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0));
 		pauseItem.addItemListener(
 			new ItemListener(){
@@ -271,57 +223,130 @@ public class Ladder extends JFrame {
 			}
 		);
 		editMenu.add(pauseItem);
-		editItem = new JMenuItem("Edit Level...", 'd');
-		editItem.addActionListener(actList);
+
+		JMenuItem editItem = new JMenuItem("Edit Level...", KeyEvent.VK_D);
+		editItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				 new Editor(level.getLevel(), Ladder.this);
+			}
+		});
 		editMenu.add(editItem);
 
 		//Build the Options menu bar
 		JMenu optionsMenu = new JMenu("Options");
-		optionsMenu.setMnemonic('o');
+		optionsMenu.setMnemonic(KeyEvent.VK_O);
 		ladderMenuBar.add(optionsMenu);
-		fontItem = new JMenuItem("Font Size...", 'z');
-		fontItem.addActionListener(actList);
+
+		JMenuItem fontItem = new JMenuItem("Font Size...", KeyEvent.VK_Z);
+		fontItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				Integer i = (Integer)JOptionPane.showInputDialog(
+					Ladder.this,
+					"Please pick a font size", "Font Size", JOptionPane.QUESTION_MESSAGE,
+					null, FONT_SIZES, Integer.valueOf(ladderCanvas.getFontSize())
+				);
+				if (i != null) {
+					ladderCanvas.setFontSize(i.intValue());
+					props.put("FontSize", ("" + i.intValue()));
+					pack();
+				}
+			}
+		});
 		optionsMenu.add(fontItem);
-		bgItem = new JMenuItem("Background Color...", 'b');
-		bgItem.addActionListener(actList);
+
+		JMenuItem bgItem = new JMenuItem("Background Color...", KeyEvent.VK_B);
+		bgItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				Color c = JColorChooser.showDialog(Ladder.this, "Background Color", ladderCanvas.getBGColor());
+				if (c != null){
+					ladderCanvas.setBGColor(c);
+					props.put("BackgroundColor", ("" + c.getRGB()));
+				}
+			}
+		});
 		optionsMenu.add(bgItem);
-		fgItem = new JMenuItem("Foreground Color...", 'f');
-		fgItem.addActionListener(actList);
+
+		JMenuItem fgItem = new JMenuItem("Foreground Color...", KeyEvent.VK_F);
+		fgItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				Color c = JColorChooser.showDialog(Ladder.this, "Background Color", ladderCanvas.getFGColor());
+				if (c != null) {
+					ladderCanvas.setFGColor(c);
+					props.put("ForegroundColor", ("" + c.getRGB()));
+				}
+			}
+		});
 		optionsMenu.add(fgItem);
 
 		//Build the difficulty menu bar
 		JMenu difficultyMenu = new JMenu("Difficulty");
-		difficultyMenu.setMnemonic('d');
+		difficultyMenu.setMnemonic(KeyEvent.VK_D);
 		ladderMenuBar.add(difficultyMenu);
-		easyItem = new JRadioButtonMenuItem("Easy");
-		easyItem.setMnemonic('e');
+
+		JRadioButtonMenuItem easyItem = new JRadioButtonMenuItem("Easy");
+		easyItem.setMnemonic(KeyEvent.VK_E);
 		difficultyGroup.add(easyItem);
-		easyItem.addActionListener(actList);
+		easyItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				ladderCanvas.setDifficulty(LadderCanvas.EASY);
+			}
+		});
 		difficultyMenu.add(easyItem);
-		mediumItem = new JRadioButtonMenuItem("Medium", true);
-		mediumItem.setMnemonic('m');
+
+		JRadioButtonMenuItem mediumItem = new JRadioButtonMenuItem("Medium", true);
+		mediumItem.setMnemonic(KeyEvent.VK_M);
 		difficultyGroup.add(mediumItem);
-		mediumItem.addActionListener(actList);
+		mediumItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				ladderCanvas.setDifficulty(LadderCanvas.MEDIUM);
+			}
+		});
 		difficultyMenu.add(mediumItem);
-		hardItem = new JRadioButtonMenuItem("Hard");
-		hardItem.setMnemonic('h');
+
+		JRadioButtonMenuItem hardItem = new JRadioButtonMenuItem("Hard");
+		hardItem.setMnemonic(KeyEvent.VK_H);
 		difficultyGroup.add(hardItem);
-		hardItem.addActionListener(actList);
+		hardItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				ladderCanvas.setDifficulty(LadderCanvas.HARD);
+			}
+		});
 		difficultyMenu.add(hardItem);
-		veryHardItem = new JRadioButtonMenuItem("Very Hard");
-		veryHardItem.setMnemonic('v');
+
+		JRadioButtonMenuItem veryHardItem = new JRadioButtonMenuItem("Very Hard");
+		veryHardItem.setMnemonic(KeyEvent.VK_V);
 		difficultyGroup.add(veryHardItem);
-		veryHardItem.addActionListener(actList);
+		veryHardItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				ladderCanvas.setDifficulty(LadderCanvas.VERY_HARD);
+			}
+		});
 		difficultyMenu.add(veryHardItem);
-		impossibleItem = new JRadioButtonMenuItem("Impossible");
-		impossibleItem.setMnemonic('i');
+
+		JRadioButtonMenuItem impossibleItem = new JRadioButtonMenuItem("Impossible");
+		impossibleItem.setMnemonic(KeyEvent.VK_I);
 		difficultyGroup.add(impossibleItem);
-		impossibleItem.addActionListener(actList);
+		impossibleItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				ladderCanvas.setDifficulty(LadderCanvas.IMPOSSIBLE);
+			}
+		});
 		difficultyMenu.add(impossibleItem);
 
 		levelMenu = new JMenu("Level");
-		levelMenu.setMnemonic('l');
+		levelMenu.setMnemonic(KeyEvent.VK_L);
 		ladderMenuBar.add(levelMenu);
+
+		ActionListener selectLevel = new ActionListener(){
+			public void actionPerformed(ActionEvent ev){
+				LevelMenuItem lvl = (LevelMenuItem) ev.getSource();
+				try {
+					changeLevel(lvl.getLevel());
+				} catch (IOException e){
+					System.err.println(e.getMessage());
+				}
+			}
+		};
 
 		// load the levels from the property file.
 		int i = 1;
@@ -340,7 +365,7 @@ public class Ladder extends JFrame {
 			}
 
 			levelMenu.add(m);
-			m.addActionListener(actList);
+			m.addActionListener(selectLevel);
 			m.setFileName(s1);
 			levelGroup.add(m);
 			i++;
@@ -490,7 +515,7 @@ public class Ladder extends JFrame {
 				ladderCanvas.requestFocus();
 			}
 		});
-		this.setResizable(true);
+		this.setResizable(false);
 		this.setTitle("Ladder");
 		this.pack();
 		running = true;

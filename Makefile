@@ -37,4 +37,4 @@ pack : compile
 	jar -v -c -m Ladder.mf -f ladder$A com/
 
 testjar : pack clean
-	javaw -jar ladder$A
+	${JAVA} -jar ladder$A
